@@ -1,3 +1,5 @@
+package outros;
+
 import java.util.Scanner;
 
 //Fa�a um programa para pesquisar o valor 8 no vetor dado:
