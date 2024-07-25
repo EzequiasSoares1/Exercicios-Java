@@ -1,24 +1,17 @@
 package jogoDaVelha;
-
-//1. Implementar o jogo em JAVA.
-//2. Usar o scanner.
-
-import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 public class JogoDaVelha {
 
     public static void main(String[] args) {
-        Scanner entrada = new Scanner(System.in);
         Tabuleiro tabuleiro = new Tabuleiro();
         Jogador jogador1, jogador2;
 
-        imprimirMensagem("Jogador 1 digite seu nome: ");
-        String nome = entrada.nextLine();
+        String nome = capturarTeclado("Jogador 1 digite seu nome: ");
         imprimirMensagem("Você será o X");
         jogador1 = new Jogador(nome, "X");
 
-        imprimirMensagem("Jogador 2 digite seu nome: ");
-        String nome2 = entrada.nextLine();
+        String nome2 = capturarTeclado("Jogador 2 digite seu nome: ");
         imprimirMensagem("Você será o O");
         jogador2 = new Jogador(nome2, "O");
 
@@ -30,11 +23,25 @@ public class JogoDaVelha {
 
         while (true) {
             int linha, coluna;
+            String captura;
 
-            imprimirMensagem(jogadorAtual.getNome() + " escolha a linha que deseja jogar:");
-            linha = entrada.nextInt();
-            imprimirMensagem(jogadorAtual.getNome() + " escolha a coluna que deseja jogar:");
-            coluna = entrada.nextInt();
+            captura = capturarTeclado(jogadorAtual.getNome() + " escolha a linha que deseja jogar:");
+            if (eNumerico(captura)) {
+                linha = Integer.parseInt(captura);
+            }else {
+                imprimirMensagem("valor invalido");
+                return;
+            }
+
+            captura = capturarTeclado(jogadorAtual.getNome() + " escolha a coluna que deseja jogar:");
+
+            if (eNumerico(captura)) {
+                coluna = Integer.parseInt(captura);
+            }else {
+                imprimirMensagem("valor invalido");
+                return;
+            }
+
 
             if (linha > 2 || coluna > 2) {
                 imprimirMensagem("Ops, posição não existe");
@@ -50,6 +57,7 @@ public class JogoDaVelha {
             imprimirTabuleiro(tabuleiro);
 
             String vencedor = tabuleiro.ganhou();
+
             if (!vencedor.equals("")) {
                 String ganhador = vencedor.equals(jogador1.getSimbolo()) ? jogador1.getNome() : jogador2.getNome();
                 imprimirMensagem(ganhador + ", você ganhou!!");
@@ -63,26 +71,34 @@ public class JogoDaVelha {
         }
     }
 
+    public static boolean eNumerico(String str) {
+        return str.matches("[0-9]*");
+    }
     public static void imprimirMensagem(String mensagem){
-        System.out.println(mensagem);
+        JOptionPane.showMessageDialog(null, mensagem);
+    }
+    public static String capturarTeclado(String texto){
+        return JOptionPane.showInputDialog(texto);
     }
 
     public static void imprimirTabuleiro(Tabuleiro tabuleiro) {
-        System.out.print("\n\n 0   1    2\n\n");
+
+        String tab ="Tabuleiro:  \n\n 0   1    2\n\n";
         for (int posicao1 = 0; posicao1 < 3; posicao1++) {
             for (int posicao2 = 0; posicao2 < 3; posicao2++) {
-                System.out.print(" " + tabuleiro.getLinhasEColunas()[posicao1][posicao2]);
+               tab += " " + tabuleiro.getLinhasEColunas()[posicao1][posicao2];
                 if (posicao2 < 2) {
-                    System.out.print(" | ");
+                    tab += " | ";
                 }
                 if (posicao2 == 2) {
-                    System.out.print("  " + posicao1);
+                    tab +="  " + posicao1;
                 }
             }
             if (posicao1 < 2) {
-                System.out.print("\n------------");
+                tab +="\n-------";
             }
-            System.out.println("\n");
+            tab +="\n";
         }
+        imprimirMensagem(tab);
     }
 }

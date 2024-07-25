@@ -1,5 +1,6 @@
-package tabuleiro;
+package xadrez;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 public class ChessBoard {
@@ -19,12 +20,20 @@ public class ChessBoard {
 
         while (true) {
             imprimirBoard(board);
+            int coluna;
 
-            System.out.println("Jogador 1 (Peão Branco), escolha a coluna do peão que deseja mover:");
-            int coluna = entrada.nextInt();
+            String res = capturarTeclado("Jogador 1 (Peão Branco), escolha a coluna do peão que deseja mover:");
+
+            if (eNumerico(res)) {
+                coluna = Integer.parseInt(res);
+            } else {
+                imprimirMensagem("valor invalido");
+                continue;
+            }
+
 
             if(coluna < 0 || coluna > 7) {
-                System.out.println("posicao invalida");
+                imprimirMensagem("posicao invalida");
                 continue;
             }
 
@@ -32,18 +41,27 @@ public class ChessBoard {
 
             imprimirBoard(board);
 
-            System.out.println("Jogador 2 (Peão Preto), escolha a coluna do peão que deseja mover:");
-            coluna = entrada.nextInt();
+            res = capturarTeclado("Jogador 2 (Peão Preto), escolha a coluna do peão que deseja mover:");
 
+            if (eNumerico(res)) {
+                coluna = Integer.parseInt(res);
+            } else {
+                imprimirMensagem("valor invalido");
+                continue;
+            }
 
             if(coluna < 0 || coluna > 7) {
-                System.out.println("posicao invalida");
+                imprimirMensagem("posicao invalida");
                 continue;
             }
 
             moverPeao(board, coluna, false);
             imprimirBoard(board);
         }
+    }
+
+    public static boolean eNumerico(String str) {
+        return str.matches("[0-9]*");
     }
 
     public static void moverPeao(String[][] board, int coluna, boolean isBranco) {
@@ -70,15 +88,22 @@ public class ChessBoard {
         }
     }
 
-
+    public static void imprimirMensagem(String mensagem){
+        JOptionPane.showMessageDialog(null, mensagem);
+    }
+    public static String capturarTeclado(String texto){
+        return JOptionPane.showInputDialog(texto);
+    }
     public static void imprimirBoard(String[][] board) {
-        System.out.print("\n 0 1 2 3 4 5 6 7\n");
+      String tab = "\n 0 1 2 3 4 5 6 7\n";
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                System.out.print(board[i][j] + " ");
+                tab += board[i][j] + " ";
             }
-            System.out.println("");
+            tab += "  \n";
         }
+
+        imprimirMensagem(tab);
     }
 }
