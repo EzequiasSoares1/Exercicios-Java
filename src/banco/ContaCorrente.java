@@ -1,4 +1,7 @@
 package banco;
+import banco.exception.DepositoInvalidoException;
+import banco.exception.EstouroSaqueException;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -8,22 +11,22 @@ public class ContaCorrente {
     private Date date;
     private ArrayList<Double> transacoes;
 
-    public boolean deposito(double valor) {
+    public boolean deposito(double valor) throws DepositoInvalidoException {
         if(valor > 0) {
             this.saldo += valor;
             this.transacoes.add(valor);
             return true;
         }
-        return false;
+        throw new DepositoInvalidoException("Nao é permitido deposito de valores negativos");
     }
 
-    public boolean sacar(double valor) {
+    public boolean sacar(double valor) throws EstouroSaqueException{
         if (this.saldo >= valor) {
             this.saldo -= valor;
             this.transacoes.add(-valor);
             return true;
         }
-        return false;
+        throw new EstouroSaqueException("Valor insuficiente");
     }
 
     public String getExtrato(){

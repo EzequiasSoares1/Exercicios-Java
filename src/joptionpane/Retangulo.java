@@ -1,4 +1,4 @@
-package JOptionPane;
+package joptionpane;
 
 public class Retangulo implements Figura{
     private float lado1;

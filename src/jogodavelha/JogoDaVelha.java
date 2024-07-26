@@ -1,11 +1,12 @@
-package jogoDaVelha;
+package jogodavelha;
 import javax.swing.JOptionPane;
 
 public class JogoDaVelha {
 
     public static void main(String[] args) {
         Tabuleiro tabuleiro = new Tabuleiro();
-        Jogador jogador1, jogador2;
+        Jogador jogador1;
+        Jogador jogador2;
 
         String nome = capturarTeclado("Jogador 1 digite seu nome: ");
         imprimirMensagem("Você será o X");
@@ -22,7 +23,8 @@ public class JogoDaVelha {
         int jogadas = 0;
 
         while (true) {
-            int linha, coluna;
+            int linha;
+            int coluna;
             String captura;
 
             captura = capturarTeclado(jogadorAtual.getNome() + " escolha a linha que deseja jogar:");
@@ -72,7 +74,7 @@ public class JogoDaVelha {
     }
 
     public static boolean eNumerico(String str) {
-        return str.matches("[0-9]*");
+        return str.matches("[\\d]");
     }
     public static void imprimirMensagem(String mensagem){
         JOptionPane.showMessageDialog(null, mensagem);

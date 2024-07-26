@@ -17,8 +17,9 @@ public class ChessBoard {
         };
 
         Scanner entrada = new Scanner(System.in);
+        int continua = 1;
 
-        while (true) {
+        while (continua != 1) {
             imprimirBoard(board);
             int coluna;
 

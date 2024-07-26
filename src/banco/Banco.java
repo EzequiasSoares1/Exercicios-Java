@@ -1,14 +1,15 @@
 package banco;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
+import banco.exception.DepositoInvalidoException;
+import banco.exception.EstouroSaqueException;
+
+import java.util.*;
 
 public class Banco {
-    private static Scanner entrada = new Scanner(System.in);
+    private static final Scanner entrada = new Scanner(System.in);
 
     public static void main(String[] args) {
-        ArrayList<Cliente> clientes = new ArrayList<>();
+        List<Cliente> clientes = new ArrayList<>();
 
         while (true){
             cadastrarCliente(clientes);
@@ -34,11 +35,15 @@ public class Banco {
                 break;
             }
 
-            operacoesBancarias(clientes, operacao);
+            try {
+                operacoesBancarias(clientes, operacao);
+            } catch (EstouroSaqueException | DepositoInvalidoException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-    public static void operacoesBancarias(ArrayList<Cliente> clientes, int operacao){
+    public static void operacoesBancarias(List<Cliente> clientes, int operacao) throws EstouroSaqueException, DepositoInvalidoException {
         listarClientes(clientes);
         imprimirMensagem("selecione o numero do cliente");
 
@@ -88,16 +93,14 @@ public class Banco {
 
     }
 
-    public static void mostrarStatus(Boolean status){
+    public static void mostrarStatus(boolean status){
         if (status)
             imprimirMensagem("transferido com sucesso");
         else
             imprimirMensagem("transferencia falhou");
     }
 
-    public static void cadastrarCliente(ArrayList<Cliente> clientes){
-        Random gerador = new Random();
-
+    public static void cadastrarCliente(List<Cliente> clientes){
         imprimirMensagem("Cadastro de Cliente");
 
         imprimirMensagem("Digite o nome completo do cliente");
@@ -105,16 +108,17 @@ public class Banco {
         imprimirMensagem("Digite o cpf do cliente");
         String cpf = entrada.nextLine();
 
-        ContaCorrente contaCorrente = new ContaCorrente(gerador.nextInt(), 0);
+        Random r = new Random();
+        int numConta = r.nextInt();
+        ContaCorrente contaCorrente = new ContaCorrente(numConta, 0);
 
         Cliente cliente = new Cliente(cpf,contaCorrente,nome);
         imprimirMensagem("Cliente Cadastrado com sucesso");
 
         clientes.add(cliente);
-
     }
 
-    public static void listarClientes(ArrayList<Cliente> clientes){
+    public static void listarClientes(List<Cliente> clientes){
         for (int i = 0; i < clientes.size(); i++){
             imprimirMensagem((i+1)+ " - " + clientes.get(i).getNome());
         }
@@ -136,7 +140,8 @@ public class Banco {
         System.out.println(contaCorrente.getExtrato());
     }
 
-    public static boolean transferirValor(ContaCorrente proprietario, ContaCorrente destinatario, double valor){
-        return proprietario.sacar(valor) ? destinatario.deposito(valor) :false;
+    public static boolean transferirValor(ContaCorrente proprietario, ContaCorrente destinatario, double valor) throws EstouroSaqueException,
+            DepositoInvalidoException {
+        return (proprietario.sacar(valor) && destinatario.deposito(valor));
     }
 }

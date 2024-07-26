@@ -1,4 +1,4 @@
-package JOptionPane;
+package joptionpane;
 
 public class Circulo implements Figura{
     private float raio;

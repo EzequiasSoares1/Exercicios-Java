@@ -1,4 +1,4 @@
-package JOptionPane;
+package joptionpane;
 
 import javax.swing.*;
 
@@ -24,7 +24,7 @@ public class Calculadora {
        String raio = capturarTeclado("Qual o valor do raio do circulo:");
 
        if (!eNumerico(raio)) {
-           imprimirMensagem("valor invalido");
+            imprimirValorInval();
        }else{
            Circulo circulo = new Circulo(Float.parseFloat(raio));
            circulo.calcularPerimetro();
@@ -36,10 +36,10 @@ public class Calculadora {
     }
     public static void calcularRetangulo(){
         String lado1 = capturarTeclado("Qual o tamanho do lado 1 do retangulo:");
-        String lado2 = capturarTeclado("Qual o tamanho do lado 1 do retangulo:");
+        String lado2 = capturarTeclado("Qual o tamanho do lado 2 do retangulo:");
 
         if (!eNumerico(lado1) && !eNumerico(lado2)) {
-            imprimirMensagem("valor invalido");
+            imprimirValorInval();
         }else{
             Retangulo retangulo = new Retangulo(Float.parseFloat(lado1), Float.parseFloat(lado2));
             retangulo.calcularPerimetro();
@@ -47,8 +47,12 @@ public class Calculadora {
             imprimirMensagem("Area: "+retangulo.getArea()+"\n Perimetro: " +retangulo.getPerimetro());
         }
     }
+    public static void imprimirValorInval(){
+        JOptionPane.showMessageDialog(null, " Valor invalido");
+    }
+
     public static boolean eNumerico(String str) {
-        return str.matches("[0-9]*");
+        return str.matches("[\\d]");
     }
 
     public static void imprimirMensagem(String mensagem){

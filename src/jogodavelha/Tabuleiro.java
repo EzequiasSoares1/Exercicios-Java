@@ -1,4 +1,4 @@
-package jogoDaVelha;
+package jogodavelha;
 
 public class Tabuleiro {
 
