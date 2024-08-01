@@ -59,7 +59,7 @@ public class Banco {
         boolean status = false;
 
         if (operacao == 1){
-            exibirExtrato(cliente.getContaCorrente());
+            exibirExtrato(cliente.getConta());
             return;
         }
         else if (operacao == 2){
@@ -73,20 +73,20 @@ public class Banco {
 
             imprimirMensagem("Qual o valor que deseja transferir?");
             valor = pegarValor();
-            status = transferirValor(cliente.getContaCorrente() , clientes.get(destino -1).getContaCorrente(), valor);
+            status = transferirValor(cliente.getConta() , clientes.get(destino -1).getConta(), valor);
 
         }
         else if(operacao == 3){
 
             imprimirMensagem("Qual o valor que deseja depositar?");
             valor = pegarValor();
-            status = cliente.getContaCorrente().deposito(valor);
+            status = cliente.getConta().deposito(valor);
 
         }
         else if(operacao == 4){
             imprimirMensagem("Qual o valor que deseja sacar?");
             valor = pegarValor();
-            status = cliente.getContaCorrente().sacar(valor);
+            status = cliente.getConta().sacar(valor);
         }
 
         mostrarStatus(status);
@@ -108,14 +108,26 @@ public class Banco {
         imprimirMensagem("Digite o cpf do cliente");
         String cpf = entrada.nextLine();
 
+        imprimirMensagem("Escolha o tipo de conta: \n 1 - Conta Corrente \n 2 - Conta Poupanca");
+        String tipoConta = entrada.nextLine();
+
+        if(tipoConta.equals("1")|| tipoConta.equals("2")){
+            Cliente cliente = new Cliente(cpf,criarContaBancaria(tipoConta),nome);
+            imprimirMensagem("Cliente Cadastrado com sucesso");
+
+            clientes.add(cliente);
+        }else {
+            mensagemErro();
+        }
+    }
+
+    public static ContaBancaria criarContaBancaria(String option){
         Random r = new Random();
-        int numConta = r.nextInt();
-        ContaCorrente contaCorrente = new ContaCorrente(numConta, 0);
+        int numConta = r.nextInt(Integer.MAX_VALUE);
 
-        Cliente cliente = new Cliente(cpf,contaCorrente,nome);
-        imprimirMensagem("Cliente Cadastrado com sucesso");
-
-        clientes.add(cliente);
+        return option.equals("1") ?
+                new ContaCorrente(numConta,0) :
+                new ContaPoupanca(numConta,0);
     }
 
     public static void listarClientes(List<Cliente> clientes){
@@ -136,12 +148,12 @@ public class Banco {
         return entrada.nextDouble();
     }
 
-    public static void exibirExtrato(ContaCorrente contaCorrente){
-        System.out.println(contaCorrente.getExtrato());
+    public static void exibirExtrato(ContaBancaria conta){
+        System.out.println(conta.getExtrato());
     }
 
-    public static boolean transferirValor(ContaCorrente proprietario, ContaCorrente destinatario, double valor) throws EstouroSaqueException,
-            DepositoInvalidoException {
+    public static boolean transferirValor(ContaBancaria proprietario, ContaBancaria destinatario, double valor)
+            throws EstouroSaqueException, DepositoInvalidoException {
         return (proprietario.sacar(valor) && destinatario.deposito(valor));
     }
 }

@@ -3,11 +3,11 @@ package banco;
 public class Cliente {
     private String nome;
     private String cpf;
-    private ContaCorrente contaCorrente;
+    private ContaBancaria conta;
 
-    public Cliente(String cpf, ContaCorrente contaCorrente, String nome) {
+    public Cliente(String cpf, ContaBancaria conta, String nome) {
         this.cpf = cpf;
-        this.contaCorrente = contaCorrente;
+        this.conta = conta;
         this.nome = nome;
     }
 
@@ -25,11 +25,11 @@ public class Cliente {
         this.cpf = cpf;
     }
 
-    public ContaCorrente getContaCorrente() {
-        return contaCorrente;
+    public ContaBancaria getConta() {
+        return conta;
     }
-    public void setContaCorrente(ContaCorrente contaCorrente) {
-        this.contaCorrente = contaCorrente;
+    public void setConta(ContaBancaria conta) {
+        this.conta = conta;
     }
 
 }
